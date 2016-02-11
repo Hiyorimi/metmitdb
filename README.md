@@ -13,6 +13,10 @@ ipython notebook --pylab=inline
 ``` 
 to run it
 
+### SQLite database ###
+
+To get the database without taxonomical data, donwload it from [Yandex.Disk](https://yadi.sk/d/R4A-2OC5ogJJF)
+
 ### Running the database online ###
 
 ```
