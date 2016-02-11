@@ -1,0 +1,32 @@
+{% extends "base_internal.html" %}
+
+{% block content %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+              <h2>Metozoa Mitochondrial Database</h2>
+                <h2>Search results for <strong>"{{ query }}"</strong>:</h2>
+           </div>
+          </div>
+            <ul>
+              {% for genome in results %}
+                  <li>
+                    <p class="lead"><a href="{{ url_for('genome_by_ncbi_id', ncbi_id=genome.ncbi_id) }}">{{  genome.name  }}</a> ({{ genome.ncbi_id }})</p>
+                  </li>
+              {% endfor %}
+            </ul>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+          <h3 id="about">About</h3>
+          <p>
+              This is a database of metzoa mitochondrial DNA, collected from NCBI and curated. This is completely
+              open-source project, following the reproducible research approach. Anyone can get copy or contribute.
+          </p>
+      </div>
+{% endblock %}

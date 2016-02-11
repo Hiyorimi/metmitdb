@@ -1,0 +1,23 @@
+{% extends "base_internal.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="jumbotron">
+          <div class="row">
+              <h2>{{ genome.name }}</h2>
+              <p>MetMitDB id: {{ genome.id }}</p>
+              <p>NCBI id: {{ genome.ncbi_id }}</p>
+              <p>GeneBank link: <a href="http://ncbi.nlm.nih.gov{{ genome.link }}">view on GeneBank</a></p>
+              <p>BP Length: {{ genome.bp_length }}</p>
+              <p>Accession number: {{ genome.accession_number }}</p>
+              <p>GI: {{ genome.gi }}</p>
+              <p>Fasta file: <a href="/get_fasta/{{ genome.id }}.fasta">FASTA</a></p>
+              {% for st in stat.keys() %}
+                  <li>
+                    <strong>{{ st.replace('_',' ') }}</strong>: {{ '%0.2f' % stat[st]|float }}
+                  </li>
+              {% endfor %}
+        </div>
+    </div>
+{% endblock %}

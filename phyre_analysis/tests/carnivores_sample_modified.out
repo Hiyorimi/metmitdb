@@ -1,0 +1,29 @@
+Output from Average Taxonomic Distinctness
+
+Number of taxa and path lengths for each taxonomic level:
+family    	11	32.7421
+subfamily 	23	18.7911
+genus     	129	29.5948
+species   	271	18.8720
+
+---------------------------------------------------
+
+Results for sample: tests/carnivores_sample
+
+Dimension for this sample is 72
+
+Number of taxa and pairwise comparisons  at each taxon level:
+family    	11	4268
+subfamily 	25	490
+genus     	60	298
+species   	72	56
+
+Number of pairwise comparisons is for pairs that differ at each level excluding comparisons that differ at upper levels
+Average taxonomic distinctness      = 92.9688
+Variation in taxonomic distinctness = 280.2311
+Minimum taxonomic distinctness      = 66.5806
+Maximum taxonomic distinctness      = 96.5774
+von Euler's index of imbalance      = 0.1203
+
+
+---------------------------------------------------

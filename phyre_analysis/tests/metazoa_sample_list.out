@@ -1,0 +1,33 @@
+Output from Average Taxonomic Distinctness
+
+Number of taxa and path lengths for each taxonomic level:
+Phylum    	25	18.9122
+Class     	77	13.3040
+Order     	509	16.7200
+Family    	5173	17.7618
+Genus     	47624	17.5603
+Species   	237002	15.7416
+
+---------------------------------------------------
+
+Results for sample: tests/metazoa_sample_list
+
+Dimension for this sample is 5075
+
+Number of taxa and pairwise comparisons  at each taxon level:
+Phylum    	19	13274988
+Class     	69	8543528
+Order     	343	3470118
+Family    	1350	301908
+Genus     	3249	149736
+Species   	5073	10268
+
+Number of pairwise comparisons is for pairs that differ at each level excluding comparisons that differ at upper levels
+Average taxonomic distinctness      = 88.3887
+Variation in taxonomic distinctness = 180.4876
+Minimum taxonomic distinctness      = 41.8811
+Maximum taxonomic distinctness      = 98.7421
+von Euler's index of imbalance      = 0.1821
+
+
+---------------------------------------------------

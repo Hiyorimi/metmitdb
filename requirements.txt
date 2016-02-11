@@ -1,0 +1,14 @@
+Flask==0.10.1
+flask-wtf>=0.12
+Biopython>=1.5
+JCC==2.21
+Jinja2==2.8
+pytz==2015.4
+virtualenv==13.1.2
+virtualenvwrapper==4.7.1
+Werkzeug==0.11.3
+wheel==0.26.0
+wtforms>=2.1
+Whoosh==2.6.0
+SQLAlchemy>=0.7
+flask-whooshalchemy-redux==0.7.1
