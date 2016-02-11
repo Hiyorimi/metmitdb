@@ -4,16 +4,18 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf import Form
 from wtforms import StringField
 from wtforms.validators import DataRequired
-from models import *
-from sequence_stats import get_sequence_stats
 import collections
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+from models import Genome
+from sequence_stats import get_sequence_stats
+
 class SearchForm(Form):
     search = StringField('search', validators=[DataRequired()])
+
 
 @app.before_request
 def before_request():
