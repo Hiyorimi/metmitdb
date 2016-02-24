@@ -1,0 +1,1524 @@
+% should work with book, report, memoir, classicthesis, ...
+\documentclass[a4paper,11pt]{article}
+% load the difabo package
+\usepackage{difabo}
+\usepackage{amsfonts}
+\usepackage[cmex10]{amsmath}
+\usepackage{graphicx}
+\usepackage{tabularx}
+
+\usepackage[procnames]{listings}
+\usepackage{color}
+
+
+\definecolor{keywords}{RGB}{255,0,90}
+\definecolor{comments}{RGB}{0,0,113}
+\definecolor{red}{RGB}{160,0,0}
+\definecolor{green}{RGB}{0,150,0}
+
+\lstset{language=Python, 
+        basicstyle=\ttfamily\fontsize{6}{7.2}\selectfont, 
+        keywordstyle=\color{keywords},
+        commentstyle=\color{comments},
+        columns=fullflexible,
+        stringstyle=\color{red},
+        showstringspaces=false,
+        identifierstyle=\color{green},
+        procnamekeys={def,class}}
+
+\usepackage[backend=bibtex]{biblatex} %backend tells biblatex what you will be using to process the bibliography file
+\addbibresource{bibl.bib}
+
+%%%%
+% optional settings
+%%%%
+
+% geometry of cover page
+%\setlength{\uniboleftmargin}{1in}
+%\setlength{\uniborightmargin}{1in}
+%\setlength{\unibotopmargin}{1in}
+%\setlength{\unibobottommargin}{1.5in}
+
+% height of name block
+%\setlength\unibonamesheight{5cm}
+
+% all styles, fonts and texts can be changed as well,
+% see the ``difabo.sty'' file for command names
+
+% for example, to change the title style and font
+%\renewcommand\UniboTitleStyle[1]{\MakeUppercase{#1}}
+%\renewcommand\UniboTitleFont{\LARGE}
+
+%%%%
+% your cover matter
+%%%%
+
+% title of your thesis, as usual
+\title{Analysis of mitochondrial genomes of metazoans}
+
+% subtitles are supported too (optional)
+%\subtitle{A comprehensive overview}
+
+% author of your thesis, as usual
+\author{Kirill Malev}
+
+% specify the cycle
+%\UniboCycle{XXVIII}
+
+% change to female form (optional)
+%\renewcommand\UniboAuthorName{Dottoranda}
+
+% thesis adviser, the title (Prof.) is optional
+\UniboAdviser[Prof.]{Marco Passamonti}
+
+% list of co-advisers (optional)
+%\UniboCoadviser[Dr.]{Kip S. Thorne}
+%\UniboCoadviser[Prof.]{John A. Wheeler}
+
+% Ph.D. coordinator
+%\UniboCoordinator{Albert Einstein}
+
+% set details of your course (optional)
+%\UniboFaculty{your faculty}
+%\UniboDepartment{your department}
+%\UniboDegree{your degree}
+%\UniboSubject{your subject}
+%\UniboFinalExam{year}
+%\UniboSettoreConcorsuale{...}
+%\UniboSettoreScientifico{...-...}
+
+
+%%%%
+% document
+%%%%
+
+\begin{document}
+%\raggedright
+% create the cover page
+\makecoverpage
+
+\clearpage
+\tableofcontents
+\clearpage
+
+% content comes here
+%---------ABSTRACT------------------
+\section{Abstract}
+The evolutionary forces that shaped mitochondrial DNA are still partially unknown.
+Some genes moved from mitochondrial genome to the nucleus during the evolution, but 
+what was the reason and how they were selected still remains an unanswered question. 
+In this work, I set up an easy accessable database of all metazoan mitochondrial genomes 
+and I use this database to compute several basic statistics on these genomes. I carried 
+out a complete phylogenetic representativeness analysis of the constructed dataset: the 
+dataset proved to be representative of the complete animal kingdom. Therefore, I was able 
+to describe most general features of metazoan mitochondrial genomes and future researches 
+can rely on the present assemblage.
+\clearpage
+
+\section{Introduction}\label{sect:intro}
+Mitochondria are universally known as the organelles which are responsible for energy 
+production. However, this is not the only function of mitochondria: as a matter of fact, 
+they are also responsible for the regulation of cellular metabolism, for the regulation of
+membrane potential and for the non­oxidative phosphorylation ~\cite{voet1999fundamentals}.
+
+Mitochondria contain a small genome, called mitochondrial DNA or mtDNA. In
+mammals cells, each mitochondrion contains about 100 copies of a circular genome of
+15,000­17,000 base­pairs (16,389 for humans) ~\cite{breton2014resourceful}. The organization of mtDNA is
+indeed highly conserved in some groups, like mammals and insects; other groups, like
+mollusks, show much higher levels of variability in genome architecture ~\cite{iborra2004functional, boore1999animal}.
+
+Generally speaking, in most metazoans mtDNA encodes on both strands, which are
+referred to as the heavy strand (or H­--strand), and the light strand (or L­--strand). 13
+genes of the typical 37 total mtDNA genes encode for proteins (Protein Coding Genes:
+PCGs), 22 are for transfer RNAs (tRNAs), and two for the small and large subunits of
+ribosomal RNA (rRNA) ~\cite{iborra2004functional}. In some cases, some differences have been found with
+respect to this general scheme ~\cite{valles2006lophotrochozoan}; one or more of these 37 genes may be absent (or
+duplicated) and there is a great range of variation in mtDNA size ~\cite{taylor2005mitochondrial}. Though
+understanding of mtDNA role in humans is still to be studied, mtDNA mutations showed
+relationship with some inherited diseases, ageing and cancer ~\cite{gissi2008evolution}.
+
+Even greater variation in mtDNA gene content and size exists among fungi and plants ~\cite{taylor2005mitochondrial},
+although there appears to be a core subset of genes that are present in all eukaryotes (except
+for the few that have no mitochondria at all). Some plant species have enormous mtDNAs (as
+many as 2,500,000 base pairs per mtDNA molecule), but, surprisingly, even those huge
+mtDNAs contain the same number and kinds of genes as related plants with much smaller
+mtDNAs ~\cite{youtheoryofself}.
+
+While being essentially important in a functional and phenotypic sense, mitochondria play
+vast role in molecular phylogenetics, population genetics and molecular evolution ~\cite{ward1981mitochondrial}.
+Molecular phylogenetics analyzes structure and functions of DNA over time, in order to achieve
+a better understanding of evolutionary relationships and gene functions. There is no determined
+way to construct phylogenetic tree, since data sets consist of different species, having different
+mutations and evolutionary pressures. Approaches to tree construction depend on the nature of
+the study, available data set and purposes. Moreover, different mathematical methods can be
+applied, including Maximum Likelihood (ML), and Markov Chain Monte Carlo (MCMC)­based
+Bayesian Inference (BI) ~\cite{gissi2008evolution}.
+
+The dataset choice and assessment is important for the conducting a scientifically proper
+research. At first, it is mandatory that the dataset has a good taxonomic coverage of the group
+that is going to be studied, i.e. different genera, families, orders, or whatever, must be
+represented in it as much as possible. Recently, a new method was proposed to rigorously
+estimate this taxonomic coverage ~\cite{dowell2005molecular}: its core statistic is phylogenetic representativeness. In
+general, phylogenetic representativeness of a given sample (some group of taxa inside the
+taxon of higher level) is a computable measure of taxonomic distinctness — a measure of how
+good selected sample represents the biodiversity of a site it belongs to ~\cite{dowell2005molecular}.
+
+Little research is sufficient to show that there are a lot of databases for studying mtDNA. For
+example, there are 8 databases suggested by the International Society of Genetic Genealogy
+~\cite{dnadatabases}. However, with the exception of GenBank ~\cite{ncbimain}, all suggested databases contain information
+only on Homo sapiens and they are focused on determining relationship between human
+people. A recently published paper presents the MitoAge database with 922 species with fully
+sequenced mtDNAs and lifespan records. This database was designed to help with comparative
+analyses between mtDNA features and animal longevity ~\cite{toren2015mitoage}.
+
+There are also the commonly cited OGRe database, with 1244 entries for metazoans, which
+was published in 2003 ~\cite{jameson2003ogre}, and MitoZoa 2.0 database ~\cite{de2012mitozoa}.
+MitoZoa 2.0 paper references other different databases: AMiGA ~\cite{feijao2006amiga}, MamMiBase ~\cite{de2005mammibase}, HmtDB
+~\cite{attimonelli2005hmtdb}, MitoFish on fishes ~\cite{iwasaki2013mitofish}. OGRe and Mitome are reported as no longer updated. So, as of
+OGRe, MitoZoa and MitoAge, only MitoAge seems to be maintained and updated with the new
+information from NCBI.
+
+In this thesis I focused on setting up an up­to­date database of all available mtDNA genomes of
+metazoans and implementing methods suggested in ~\cite{plazzi2010phylogenetic} to work with big data samples. To
+date, 5337 entries with complete mitochondrial genomes are available at NCBI RefSeq. In this
+work, I focus on constructing a database of all available metazoan mtDNA genomes. The most
+similar present database, MitoAge ~\cite{toren2015mitoage} contains information from NCBI and AnAge database
+and designed to help research mtDNA from the perspective of aging. My work was dedicated to
+the construction of a database, which would help research phylogeny and the mtDNA itself. I
+managed to collect 5298 mitochondrial genomes. I also test phylogenetic representativeness of
+the database as a whole with respect to the Metazoa. Given that the database is representative
+of the complete animal kingdom, I can compute some basic statistics on collected mtDNAs.
+That database could also be used for researching mitochondria functions, origin, studying
+reasons of the gene transfer to nucleus, as long as for any other gene functions or medical
+research purposes.
+\clearpage
+\section{Materials and methods}
+
+Since all the actions and manipulation with database creation are documented and available in
+the enclosed attachment, in the present section I only briefly describe the workflow, referencing
+the enclosed ipython notebook file for details.
+
+All the work was performed on a clean Ubuntu 14.04 image; all packages required for database
+construction are listed in the github README file. One of the future enhancements of my work
+may be using docker containers technology to ship database creation process.
+The process of database creation is split into the following parts.
+
+\begin{enumerate}
+\item Parsing Database and downloading genome in FASTA format;
+\item Building up a database and performing technical actions to ensure workflow;
+\item Database cleanup and tests for database consistency;
+\item Calculation of phylogenetic representativeness;
+\item Calculation of statistics.
+\end{enumerate}
+
+The database was built with publicly available data and it is not automatically updated. All the
+code and workflow are published with all the corresponding tips, so that further development
+may be conducted. Complete mtDNA sequences were downloaded from NCBI RefSeq
+database ~\cite{pruitt2005ncbi}. Full taxonomy data were retrieved from the NCBI Taxonomy on­line database via
+ftp (up­do­date dump collected with the link ~\cite{nbbidump} on 31 of July 2015]) ~\cite{federhen2012ncbi}. These database
+consists of two files: gi\_taxid\_nucl.dmp, which is about 160 MB and contains two columns (the
+nucleotide gi and tax\_id) and gi\_taxid\_prot.dmp, which is about 17 MB and also contains two
+columns (the protein's gi and taxid) ~\cite{ncbireadme}.
+
+All the resulted raw data were further filtered and curated with scripts and programs, described
+in this thesis: \texttt{(i)} genomes longer than 1 mln base pairs and extra Homo sapiens genomes were
+sorted out, since we focus on constructing database of mtDNA genomes of metazoans, \texttt{(ii)}
+inconsistent entries were removed or manually curated, \texttt{(iii)} database was checked for
+duplicates. As the result, I obtained 5296 unique tax\_id genomes.
+
+\subsection*{Phylogenetic Representativeness}
+Phylogenetic representativeness calculation relies on measuring of the loss of
+biodiversity from taxonomic level $t$ to level $t+1$ as:
+
+\begin{equation*}
+\Delta S_{(t)}=S_{(t)}-S_{(t+1)}{(1\leq t \leq T -1)}
+\end{equation*}
+
+where $S_{(t)}$ -- number of taxa of rank $t$, with $t = 1,2,3,\ldots,T$ from the lowest (f.i., species) to the highest (f.i., phylum) taxonomic level. When $t=T$, $S_{(t)}$ , since there is one root of $t = 1$, $S_{(t)}$ the tree. In case $t=1$, $S_{t}$ equals to number of Operational Taxonomic Units (OTUs; operational definition of a species or group of species often used when only DNA sequence data is available), in the master list.
+
+The method suggested by Clarke and Warwick relies on weighting all of the step lengths in a taxonomic tree structure as following:
+
+\begin{equation*}
+l_{n}=\frac{100}{2(T-1)}
+\end{equation*}
+
+because any two terminal nodes of taxonomic tree can be connected by a maximum $2(T-1)$ steps.
+
+Path lengths for each taxa level are obtained as:
+\begin{equation*}
+l_{t}=l_{t^{*}}=\frac{50\Delta S_{t}}{\sum_{t=1}^{T-1}\Delta S_{(t)}},t^{*}=N-t+1,
+\end{equation*}
+where $l_t$ is the path length from level $t$ to level $t+1$ and $l_t^{*}$ is the reverse path length.
+
+The Average Taxonomic Distinctness (referenced as AvTD below) is a quantitive descriptive statistic of such tree. By definition, it is the average of all pairwise distances between the taxonomic tree terminal nodes. It can be calculated as ~\cite{dowell2005molecular}:
+
+\begin{equation*}
+AvTD=\frac{\sum_{i=1}^{S}\sum_{j=1}{S}\omega_ij}{S(S-1)},
+\end{equation*}
+where $\omega_{ij}$ -- is the taxonomic distance between OTUs i and j, which are joined by N branches of the tree and can be obtained with:
+
+\begin{equation*}
+\omega_{ij}=\sum_{n=1}^{N}l_{n}.
+\end{equation*}
+
+AvTD plays a vast role in phylogenetic analysis, demonstrating the level of biodiversity. Higher AvTD for data set demonstrates higher biodiversity, since taxons are more distinct from each other. One of the key AvTD characteristics -- independance from sampling error, as shown in ~\cite{voet1999fundamentals}[29]. It is really important since the procedure suggested in ~\cite{dowell2005molecular} relies on subsampling data sets from original master list.
+
+Variation in Taxonomic Distinctness (VarTD) is a standard statistical variance of the dataset and computed as:
+
+\begin{equation*}
+VarTD=\frac{\sum_{i=1}{S}\sum_{j=1}{S}\omega_{ij}^{2}}{S(S-1)}-AvTD
+\end{equation*}
+
+VarTD becomes really usefull for the datasets, where AvTD can't demonstrate distinctness of two subsamples, for example, for the same nodes, but different structure. Determination of phylogenetic representativeness of the sample relies on comparison of VarTD with random subsamples from master list. Equal and "appropriate" division of taxons corresponds to low VarTD, so, as rule of thumb — lower VarTD is better. VarTD is biased toward lower values, corresponding to small S, but the bias wears off for $S>10$.
+
+Since the mtDNA genomes are obtained from NCBI, data may be biased towards certain taxonomical unit. Von Euler's index of imbalance $(I_{E})$ is the measure of tree imbalance. It demonstrates whether groups are represented "equally" and calcualted as:
+
+\begin{equation*}
+I_{E}=\frac{AvTD_{max}-AvTD}{AvTD_{max}-AvTD_{min}},
+\end{equation*}
+
+where $AvTD_{max}$  and $AvTD_{min}$  -- maximum and minimum $AvTD$ for the current sample. $AvTD_{max}$ -- is the  of a completely balanced tree constructed on the given data and  $AvTD_{min}$ --  of completely imbalanced tree. Procedures for obtaining completely balanced and imbalanced trees are described at ~\cite{dowell2005molecular}[12, p13].
+
+Assumptions on whether subsample is representative or not are made based on calculation of the statistics, using monte carlo method. 
+
+The procedure for estimating robustness of the analysis can be described in two phases:
+\begin{enumerate}
+  \item Shuffle phase, during which master list is being shuffled into random subsamples. Shuffling phase is described at ~\cite{dowell2005molecular}.
+  \item Analysis phase, during which phylogenetic representativeness anylsis is carried out by calculating the statistics.
+\end{enumerate}
+
+Since all the statistics are computed for each independent subsample, standart 95\% (two-tailed) confidence intervals are computed for each one ~\cite{dowell2005molecular}. For each subsample, six sets of measurements are obtained:
+
+\begin{enumerate}
+\item Lower $AvTD$ 95\% confidence limit;
+\item Mean $AvTD$;
+\item Mean $VarTD$;
+\item Upper $VarTD$ 95\% confidence limit;
+\item Maximum $AvTD$;
+\item Minimum $VarTD$;
+\end{enumerate}
+
+
+Confidence intervals are computed for each s across all master lists, thus giving an idea of the stability of results (we do s tests for each dimension in the set range, including testing subsample size. In our case, we run simulation from 5053 to 5096, because we had 5075 samples in the target sample list).
+
+Information about gene position was obtained from GeneBank. In the absence of explicit "D-loop" region annotation, the longest unannotated part of the mtDNA was considered as the D-loop. 
+
+Beside focusing on constructing the database, in this thesis I also put attention into reproducibility and community-availability of the conducted work. Since information in the databases we cited is being outdated rather fast, I provide a well documented pathway for reproducing my work. 
+
+Reproducibility means that authors should submit all the necessary materials and code with all the data sets, so the output similar to the authors can be produced ~\cite{peng2009reproducible}. I constructed a database of all Metozoa mitochondrial genomes, using publicly available data. The resulting scripts and code include the following.
+
+\begin{enumerate}
+\item Main ipython notebook file which directs the workflow of this thesis. This script will download all the data, call other software, and call the necessary functions for conducting the analysis described in the article. 
+\item Comments and notes on handling the data, if the scripts and code can not be executed directly from the main script.
+\item Resulting database in Postgre SQL format. Final work will be published and open-sourced with the MIT licence on the github ~\cite{metmitdb, metmitdbgithub}.
+\end{enumerate}
+
+\subsection{Data sources and data curation}
+For these 5296 mtDNA entries, different statistics were computed: size, base composition, statistics for  specific regions/genes (D-loop, protein-coding genes, rRNA-coding genes and tRNA-coding genes). For each protein-coding gene and for protein sequence itself, I computed base composition and amino acids frequency. 
+
+Reproducible research approach suggests that constructed database can be maintained and kept updated by researches, since all the workflow is well documented and described in the enclosed attachments.
+
+\subsection{Database construction}
+To calculate phylogenetic representativeness we need mtDNA genomes and taxonomical data. These data can be accessed fetching NCBI search results pages like ~\cite{federhen2012ncbi} and getting links to complete mitochondrial genome sequences.
+
+All the genome entries are stored into sqlite database with fields created with following structure (in SQL format): 
+\begin{quote}
+\texttt{CREATE TABLE genome ( d INTEGER NOT NULL, number INTEGER, ncbi\_id INTEGER,  link VARCHAR, name VARCHAR, bp\_length INTEGER, accession\_number VARCHAR, gi INTEGER, PRIMARY KEY (id) )}.  
+\end{quote}
+So we will retain ncbi\_id for future references, link to the sequence page, bp\_length (which will help us later), accession\_number and gi id.
+
+Parsing of NCBI for the suggested query resulted in obtaining 44,299 entries. Then the FASTA encoded genomes were dowloaded by addressing the URL \emph{http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi} with specific parameters. 
+
+Then I downloaded available taxonomy data from NCBI. The data set contained information about taxon being a sub-taxon of another, so generating a master list, which is required for phylogenetic representativeness calculation, was impossible out-of-the-box. Data were extracted and converted it into PosgreSQL format, because originally data was presented as a text files. 
+
+The master list was generated using parallel programming due to relatively big size of the dataset  of 243,168 entries. The algorithm was rather simple -- we recursively walked down the taxonomy tree with parallel threads. Since they only needed to read from database, threads could address it without any race condition or blocking.
+
+After generation of master list, it was quick to construct a sample list of available 5,296 entries with mtDNA genomes.
+
+Having master and sample lists, we addressed the original PhyRe software ~\cite{plazzi2010phylogenetic}, but it was unable to process such big files and calculate phylogenetic representativeness. Therefore, an update was written, which resulted in significant enhancement of PhyRe project. 
+
+The original source code of the software ~\cite{plazzi2010phylogenetic, phyre} was out-dated. So I enhanced it with the test coverage, documentation and adding options for processing large files. We also created a separate github repository, so the PhyRe can be further maintained if required. Test coverage suggests that any other enhancements of project would maintain the functionality of the project.
+
+\clearpage
+\section{Results and Discussion}
+As the result of this work, a Metazoa Mitochondrial Database (MetMitDB), containing 5,296 unique taxonomical IDs, was constructed and published, both as a service and a open-source project online ~~\cite{metmitdb, metmitdbgithub}.  As stated in the workbook, simple operations like using 'grep' software were taking around 16 seconds  to get a taxon name. After converting raw data to PostgreSQL, the same query took 105 seconds. However, building an index reduced this time to 0.19 seconds, so the master list of metazoans was generated in acceptable time.
+
+The phylogenetic representativeness of the database was demonstrated using the update PhyRe software; Fig. ~\ref{fig:figATD} shows the funnel plot of Average Taxonomic Distinctness (AvTD), while Fig. ~\ref{fig:figVTD} shows the funnel plot of the Variance of Taxonomic Distinctness (VarTD). Generated metazoa sample and master lists are enclosed in the Appendix.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=\textwidth]{images/fig1.jpg}
+\caption{Average Taxonomi Distinctness of the collected dataset}\label{fig:figATD}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=\textwidth]{images/fig2.jpg}
+\caption{Variance in Taxonomic Distinctness of the collected dataset.}\label{fig:figVTD}
+\end{center}
+\end{figure}
+
+PhyRe results suggest that Metozoans, for which mtDNA was sequenced and uploaded to NCBI can represent all Metazoa. The AvTD of the database is higher than the maximum AvTD value for simulated datasets, as long as variance is significantly lower. In fact, constructed database retains lower variation than any random subsample of the same size. In other words, that means that collected database with available mtDNA genomes contains enough biodiversity and taxonomic distinctness to represent Metazoa.
+
+Different statistics for each mtDNA genome were calculated, including information about protein-coding genes and D-loop (controlling sequence) and they are supplied in the following tables.
+
+\begin{table}[H]
+\caption{Total mtDNA genome statistics}
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
+\hline
+\small
+ & Sequence & GC\% & G & C & A & T \\
+ & length   &      &   &   &   & \\ \hline
+Mean & 16338.36 & 38.20 & 2349.27 & 3920.37 & 5253.38 & 4799.41 \\ \hline
+Median & 16530 & 39.69 & 2290 & 4303 & 5285 & 4545 \\ \hline
+$\sigma$ & 2009.60 & 7.75 & 667.66 & 1213.70 & 892.89 & 986.35 \\ \hline
+\end{tabularx}
+
+\caption{Total gene-coding sequences statistics}
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
+\hline
+\small
+ & Sequence & GC\% & G & C & A & T \\
+ & length   &      &   &   &   & \\ \hline
+Mean & 15923.17 & 38.42 & 2497.27 & 3659.11 & 4825.05 & 4924.23 \\ \hline
+Median & 15570 & 39.75 & 2426 & 3971 & 4797 & 4525 \\ \hline
+$\sigma$ & 3478.81 & 7.73 & 673.86 & 1460.65 & 1171.09 & 1271.64 \\ \hline
+\end{tabularx}
+
+\caption{Total D-loop coding sequences stats}
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
+\hline
+\small
+ & Sequence & GC\% & G & C & A & T \\
+ & length   &      &   &   &   & \\ \hline
+Mean & 237.07 & 39.04(\%) & 34.98 & 48.94 & 78.46 & 74.44\\ \hline
+Median & 39 & 38.72(\%) & 9 & 11 & 13 & 11\\ \hline
+$\sigma$ & 476.95 & 18.67(\%) & 85.89 & 93.84 & 158.81 & 160.69\\ \hline
+\end{tabularx}
+\end{table}
+
+
+
+\clearpage
+\section{Conclusions}
+I built an up-to-date database of all the available sequenced mtDNA genomes of metazoans and, perhaps more importantly, provided all the source files, so my work can be easily reproduced and continued to keep the database updated with newly sequenced data.
+
+Apart from constructing database I also modified and updated the PhyRe software, made the code more clear and improved performance for big datasets (for higher taxa levels). The updated code was published at github, so it can be maintained and improved ~\cite{metmitdb}.
+
+The resulted metazoa mtDNA database has a confirmed phylogenetic representativeness and thus can be used to study mtDNA development through evolution process and gene transfer. Apart from confirming phylogenetic representativeness, I calculated basic mtDNA statistics (mean, median and standard deviation for amino acids base count, total length and GC\%) for Metazoa, giving some examples on how it can be used in further researches.
+
+
+\clearpage
+\printbibliography
+
+\clearpage
+\section{Appendix A}
+Taxonomy list code snippet
+
+\begin{lstlisting}
+#we define function which is recursively getting 
+#all taxonomy ids until we meet root
+
+def get_tax_sequence (initial_id, tax_list, tax_session):
+    try:
+        parent_tax_id = tax_session.query(Node).filter(Node.tax_id==initial_id).first().parent_tax_id
+    except AttributeError:
+        print 'AttributeError with tax_list = ',tax_list,' initial_id = ',initial_id
+        return []
+    if parent_tax_id !=2759:
+        parent_name = tax_session.query(Name).filter(Name.tax_id==initial_id).first().name_txt
+        rank = tax_session.query(Node).filter(Node.tax_id==initial_id).first().rank
+        if rank in ('species','genus','family','order','class','phylum','kingdom'):
+            #print parent_name, '\t\t',rank
+            tax_list.append([parent_tax_id, parent_name, rank])
+        parent_tax_id = get_tax_sequence(parent_tax_id, tax_list, tax_session)
+    else: 
+        return tax_list
+    return tax_list
+
+def print_taxonomy (tax_list,fp=None):
+    if tax_list:
+        if (fp==None):
+            print tax_list[1][1].replace(' ','_')+'_'+tax_list[0][1].replace(' ','_')
+            for element in reversed(tax_list):
+                if len(tax_list)==6 and (element[2]=='order') :
+                    print '/','\t\t','class'
+                elif element[2]=='kingdom' :
+                    pass
+                else:
+                    print element[1], '\t\t',element[2]
+            
+            print ''
+        else:
+            fp.write(tax_list[1][1].replace(' ','_')+'_'+str(tax_list[0][1].replace(' ','_'))+'\t')
+            for element in reversed(tax_list):
+                if len(tax_list)==6 and (element[2]=='order') :
+                    fp.write('/\t')
+                elif element[2]=='kingdom' :
+                    pass
+                elif element[2]=='species' :
+                    fp.write(element[1].replace(' ','_')+'\n')
+                else:
+                    fp.write(element[1].replace(' ','_')+'\t')
+    else:
+        print 'List is empty'
+
+import multiprocessing as mp
+import time
+
+tax_session_factory = sessionmaker(bind=tax_engine)
+fn = 'phyre_analysis/data/metazoa_sample_list_parallel.txt'
+
+def worker(tax_id, q):
+    '''Actually connects to database to get the taxonomy'''
+    
+    start = time.clock()
+    local_session = scoped_session(tax_session_factory)
+    resulting_taxonomy = get_tax_sequence(tax_id, [], local_session)
+    done = time.clock() - start
+    
+    #adding resulting taxonomy to the queue
+    q.put(resulting_taxonomy)
+    local_session.remove()
+    return resulting_taxonomy
+
+def listener(q):
+    '''listens for messages on the q, writes to file. '''
+
+    f = open(fn, 'wb') 
+    f.write('Taxon: Phylum Class Order Family Genus Species\n')
+    while 1:
+        m = q.get()
+        if m == 'kill':
+            #f.write('killed')
+            break
+        tax_list = m
+        
+        if tax_list:
+            f.write(tax_list[1][1].replace(' ','_')+'_'+str(tax_list[0][1].replace(' ','_'))+'\t')
+            for element in reversed(tax_list):
+                if len(tax_list)==6 and (element[2]=='order') :
+                    f.write('/\t')
+                elif element[2]=='kingdom' :
+                    pass
+                elif element[2]=='species' :
+                    f.write(element[1].replace(' ','_')+'\n')
+                else:
+                    f.write(element[1].replace(' ','_')+'\t')
+        f.flush()
+    f.close()
+
+def main():
+    #must use Manager queue here, or will not work
+    manager = mp.Manager()
+    q = manager.Queue()    
+    pool = mp.Pool(mp.cpu_count()+2)
+    
+    start = time.clock()
+
+    #put listener to work first
+    watcher = pool.apply_async(listener, (q,))
+
+    #fire off workers
+    jobs = []
+    for i in range(len(tax_ids)):
+        job = pool.apply_async(worker, (tax_ids[i], q))
+        jobs.append(job)
+
+    # collect results from the workers through the pool result queue
+    for job in jobs: 
+        try:
+            job.get()
+        except RuntimeError:
+            print 'RuntimeError: maximum recursion depth exceeded while getting the str of an object'
+
+    #now we are done, kill the listener
+    q.put('kill')
+    pool.close()
+    done = time.clock() - start
+    
+    print 'Time for sample list generation: ',done
+
+if __name__ == "__main__":
+   main()
+\end{lstlisting}
+
+Sample list generation code snippet
+
+\begin{lstlisting}
+#we define function which is recurisevely getting all taxonomy ids until we meet terminal node
+
+def get_all_paths (node_id, tax_session, paths=None, current_path=None, verbose = False):
+    """Getting all the paths for the tree, starting at root initial_id"""
+    
+    if paths is None:
+        paths = []
+    if current_path is None:
+        current_path = []
+    if verbose:
+        print 'appending value', node_id, 'current path:',current_path
+    
+        
+    current_taxon_name_object = tax_session.query(Name).filter(Name.tax_id==node_id).first()
+    node_name = current_taxon_name_object.name_txt
+    rank = tax_session.query(Node).filter(Node.tax_id==node_id).first().rank
+    
+    
+    if rank in ('species','genus','family','order','class','phylum','kingdom'):
+        current_path.append([node_name,rank])
+        
+    if rank != 'subspecies':
+    
+        childs_taxs_list = tax_session.query(Node.tax_id).filter(Node.parent_tax_id==node_id).all()
+        
+        if verbose:
+            print "Childs tax list: ", childs_taxs_list
+        
+        if childs_taxs_list == [] :
+            #if node doesn't ahve children - it is terminal node
+            
+            if verbose:
+                print 'appending to paths',paths, 'current path: ', current_path
+                paths.append(current_path)
+            if len(current_path)>=5:
+                paths.append(current_path)
+                
+        else:
+            for child in childs_taxs_list:
+                get_all_paths(child[0], tax_session, paths, list(current_path),verbose=verbose)
+                
+    else:
+        if verbose:
+                print 'appending to paths',paths, 'current path: ', current_path
+                paths.append(current_path)
+        if len(current_path)>=5:
+                paths.append(current_path)
+            
+    if verbose:
+        print 'returning paths:', paths
+    return paths
+    
+
+get_all_paths(30422,tax_session,verbose=True)
+
+\end{lstlisting}
+
+Master list generation code snippet 
+
+\begin{lstlisting}
+def print_taxonomy_by_path (path, string_output = False):
+        taxonomy = {}
+        for tax_id in path:
+            name = tax_id[0]
+            rank = tax_id[1]
+            if rank in ('species','genus','family','order','class','phylum'):
+                taxonomy[rank] = name
+        if string_output:
+            result = ''
+            try:
+                if (u'species' in taxonomy.keys()) and (u'genus' in taxonomy.keys()):
+                    result += (str(taxonomy['genus']).replace(' ','_')+'_'+str(taxonomy['species']).replace(' ','_')+'\t')
+                    for tax in reversed(['species','genus','family','order','class','phylum']):
+                        if tax in taxonomy.keys():
+                            if tax=="species":
+                                result += '%s' % (taxonomy[tax].replace(' ','_')+'\n')
+                            else:
+                                result += '%s' % (taxonomy[tax].replace(' ','_')+'\t')
+                        else:
+                            if tax=="species":
+                                result += '%s' % ('/\n')
+                            else:
+                                result += '%s' % ('/\t')
+                    return result
+                else:
+                    return '\n'
+            except:
+                return '\n'
+        else:
+            try:
+                if (u'species' in taxonomy.keys()) and (u'genus' in taxonomy.keys()):
+                    print str(taxonomy['genus']).replace(' ','_')+'_'+str(taxonomy['species']).replace(' ','_')+'\t',
+                    for tax in reversed(['species','genus','family','order','class','phylum']):
+                        if taxonomy[tax]:
+                            print taxonomy[tax]+'\t',
+                        else:
+                            print '/',
+                        if tax=='species':
+                            print '\n'
+                    
+                    return 1
+                else:
+                    print path
+            except:
+                print path
+        
+import multiprocessing as mp
+from datetime import datetime
+
+tax_session_factory = sessionmaker(bind=tax_engine)
+fn = 'phyre_analysis/data/metazoa_master_list.txt'
+
+def worker(taxonomy_sequence, q):
+    '''Returns string to write'''
+    
+    resulting_taxonomy = print_taxonomy_by_path(taxonomy_sequence,string_output = True)
+    
+    #adding resulting taxonomy to the queue
+    q.put(resulting_taxonomy)
+    return resulting_taxonomy
+
+def listener(q):
+    '''listens for messages on the q, writes to file. '''
+
+    f = open(fn, 'wb') 
+    f.write('Taxon: Phylum Class Order Family Genus Species\n')
+    all_paths = []
+    while 1:
+        m = q.get()
+        if m == 'kill':
+            #f.write('killed')
+            break
+        tax_string = m
+        
+        if tax_string:
+            f.write(tax_string)
+        f.flush()
+
+    f.close()
+
+
+#must use Manager queue here, or will not work
+manager = mp.Manager()
+q = manager.Queue()    
+pool = mp.Pool(mp.cpu_count())
+
+start = datetime.now()
+
+#put listener to work first
+watcher = pool.apply_async(listener, (q,))
+
+#fire off workers
+jobs = []
+for i in range(len(taxons)):
+    job = pool.apply_async(worker, (taxons[i], q))
+    jobs.append(job)
+
+# collect results from the workers through the pool result queue
+for job in jobs: 
+    try:
+        job.get()
+    except RuntimeError:
+        print 'RuntimeError: maximum recursion depth exceeded while getting the str of an object'
+
+#now we are done, kill the listener
+q.put('kill')
+pool.close()
+done = datetime.now() - start
+
+print 'Time for master list generation: ',done
+\end{lstlisting}
+
+\clearpage
+\section{Appendix B}
+PhyRe code
+\begin{lstlisting}
+#!/usr/bin/python
+"""
+==================================================================
+Phylogenetic representativeness: a new method for evaluating taxon
+sampling in evolutionary studies
+==================================================================
+
+CODENAME:     PhyRe
+DESCRIPTION:
+
+Copyright (c) 2009 Ronald R. Ferrucci, Federico Plazzi, and Marco Passamonti.
+Rewritten and enhanced by Malev K, 2015
+
+According to license limitations:
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+"""
+
+from re import * #NOQM
+import sys
+from optparse import OptionParser
+from random import sample
+from collections import defaultdict, Counter
+
+
+def PathLength(population, taxon, count_of_the_taxons_entries_on_each_level):
+    """Calculates Path length for given master list. Results are used later."""
+
+    number_of_unique_taxons_entries_on_each_level = {}
+    taxon_names = defaultdict()
+    unique_taxon_names = defaultdict()
+    taxon_level_counter = defaultdict()
+
+    for t in taxon:
+        taxon_names[t] = []
+
+    for entry in population:
+        for t in taxon:
+            taxon_names[t].append(population[entry][t])
+
+    for t in taxon:
+        unique_taxon_names[t] = frozenset(taxon_names[t])
+        taxon_level_counter[t] = Counter(taxon_names[t])
+
+    for t in taxon:
+        count_of_the_taxons_entries_on_each_level[t] = {}
+
+        if taxon.index(t) == 0:
+            for i in unique_taxon_names[t]:
+                # count number of taxon entries for each unique taxon in group
+                count_of_the_taxons_entries_on_each_level[t][i] = taxon_level_counter[t][i]
+        else:
+            for i in unique_taxon_names[t]:
+                if i not in unique_taxon_names[taxon[taxon.index(t) - 1]]:
+                    # if this taxon doesn't belong to previous level, we get count of it
+                    # it might get the name of the parent, if we have missing data
+                    count_of_the_taxons_entries_on_each_level[t][i] = taxon_level_counter[t][i]
+
+        number_of_unique_taxons_entries_on_each_level[t] = len(count_of_the_taxons_entries_on_each_level[t])
+
+    print "Finished getting number of unique entries"
+
+    n = [float(len(count_of_the_taxons_entries_on_each_level[t])) for t in taxon]
+    # we insert N for the common ancestor of all entries
+    n.insert(0, 1.0)
+
+    unscaled_weights = []
+    for i in range((len(n) - 1)):
+        j = i + 1
+
+        if n[i] > n[j]:
+            c = 1
+        else:
+            c = (1 - n[i] / n[j])
+
+        unscaled_weights.append(c)
+
+    s = sum(unscaled_weights)
+    adjusted_coefficient = [i * 100 / s for i in unscaled_weights]
+
+    coef = {}
+    pathLengths = {}
+    for i in range(len(taxon)):
+        t = taxon[i]
+        coef[t] = sum(adjusted_coefficient[i:])
+        pathLengths[t] = adjusted_coefficient[i]
+
+    return coef, number_of_unique_taxons_entries_on_each_level, pathLengths
+
+
+def ATDmean(data, sample, taxon, coef):
+    """Calculates mean average taxonomic distinctness for given data"""
+
+    N = len(sample)
+
+    Taxon = {}
+    taxonN = {}
+    AvTD = 0
+    n = 0
+    # Taxon are counts of taxa at each level, taxonN are numbers of pairwise differences
+    # at each level, with n being the accumlation of pairwise differences at that level. the difference
+    # between n and TaxonN is the number of species that are in different taxa in that level
+    # but not in upper levels
+
+    for t in taxon:
+        Taxon[t] = {}
+        x = [data[i][t] for i in sample]
+        for i in set(x):
+            Taxon[t][i] = x.count(i)
+
+    for t in taxon:
+        taxonN[t] = sum([Taxon[t][i] * Taxon[t][j] for i in Taxon[t] for j in Taxon[t] if i != j])
+        n = taxonN[t] - n
+        AvTD = AvTD + (n * coef[t])
+        n = taxonN[t]
+
+    # print sample
+    AvTD /= (N * (N - 1))
+
+    return AvTD, taxonN, Taxon
+
+
+def ATDvariance(taxonN, sample, atd, taxon, coef):
+    """Calculates variance of average taxonomic distinctness for given data"""
+
+    vtd = []
+
+    vtd = 0
+    N = 0
+    n = 0
+
+    for t in taxon:
+        n = taxonN[t] - n
+        vtd = vtd + n * coef[t] ** 2
+        n = taxonN[t]
+
+    N = len(sample)
+    n = N * (N - 1)
+
+    vtd = (vtd - ((atd * n) ** 2) / n) / n
+
+    return vtd
+
+
+def euler(data, atd, TaxonN, taxon, Taxon, coef):
+    """Calculates von Euler's index of imbalance for given data"""
+
+    sample = data.keys()
+
+    n = len(sample)
+    TDmin = 0
+    N = 0
+    for t in taxon:
+        k = len(Taxon[t])
+        TDmin += coef[t] * (((k - 1) * (n - k + 1) * 2 + (k - 1) * (k - 2)) - N)
+        N += ((k - 1) * (n - k + 1) * 2 + (k - 1) * (k - 2)) - N
+
+    TDmin /= (n * (n - 1))
+
+    taxon.reverse()
+    TaxMax = defaultdict()
+    taxonN = defaultdict()
+
+    for t in taxon:
+        TaxMax[t] = []
+        if taxon.index(t) == 0:
+            TaxMax[t] = []
+            for i in range(len(Taxon[t])):
+                TaxMax[t].append([])
+            for i in range(len(Taxon[t])):
+                TaxMax[t][i] = [sample[j] for j in range(i, n, len(Taxon[t]))]
+        else:
+            TaxMax[t] = []
+            for i in range(len(Taxon[t])):
+                TaxMax[t].append([])
+                s = taxon[taxon.index(t) - 1]
+
+                Tax = [TaxMax[s][j] for j in range(i, len(Taxon[s]), len(Taxon[t]))]
+
+                for j in Tax:
+                    TaxMax[t][i] += j
+        TaxMax[t].reverse()
+
+    taxon.reverse()
+    TDmax = 0
+    n = 0
+    N = len(sample)
+
+    for t in taxon:
+        taxonN[t] = sum(
+                [len(TaxMax[t][i]) * len(TaxMax[t][j]) for i in range(len(TaxMax[t])) for j in range(len(TaxMax[t])) if
+                 i != j])
+        n = taxonN[t] - n
+        TDmax += n * coef[t]
+        n = taxonN[t]
+        # for i in TaxMax[t]:
+        #    print t, len(i)
+
+    TDmax /= (N * (N - 1))
+
+    EI = (TDmax - atd) / (TDmax - TDmin)
+
+    return {'EI': EI, 'TDmin': TDmin, 'TDmax': TDmax}
+
+
+def get_sample_subset_from_sample_file(samplefile, population):
+    """Function, which parses parameters
+
+     Parameters
+    ----------
+    samplefile : string
+        Sample file filename
+    population : dict
+        Dict with master list
+
+    Returns
+    -------
+    sample : dict
+        subsample from master list
+    """
+
+    sample = {}
+
+    for i in open(samplefile):
+
+        if match('Taxon:', i):
+            continue
+        elif match('Coefficients:', i):
+            continue
+
+        x = i.split()
+
+        species = x[0]
+        try:
+            sample[species] = population[species]
+        except KeyError:
+            print "Key Erorr: ", species
+            return sample
+
+    return sample
+
+
+def printResults(taxon, taxonN, popN, pathLengths, results):
+    """Prints result of performed analysis in the preset format
+
+    Parameters
+    ----------
+    taxonN : dict
+    taxonN : dict
+    popN : dict
+    pathLengths : dict
+        Dictionary with taxon Path length data. Taxon name serves as key
+    results : list
+        List of computed coefficients
+
+    Returns
+    -------
+    analysis_result : dict
+        Dictionary with Average taxonomic distinctness, Variation in taxonomic distinctness,
+        Minimum and maximum taxonomic distinctness and von Euler's index of imbalance
+
+    """
+
+    analysis_result = "Output from Average Taxonomic Distinctness\n\n"
+    analysis_result += "Number of taxa and path lengths for each taxonomic level:\n"
+
+    for t in taxon:
+        analysis_result += '%-10s\t%d\t%.4f\n' % (t, popN[t], pathLengths[t])
+        n = taxonN[t]
+
+    analysis_result += "\n"
+
+    for f in results:
+        analysis_result += "---------------------------------------------------\n\n"
+        analysis_result += "Results for sample: %s\n\n" % (f)
+        analysis_result += "Dimension for this sample is %s\n\n" % (results[f]['n'])
+        analysis_result += "Number of taxa and pairwise comparisons  at each taxon level:\n"
+
+        n = 0
+        for t in taxon:
+            N = results[f]['N'][t] - n
+            analysis_result += '%-10s\t%i\t%i\n' % (t, len(results[f]['taxon'][t]), N)
+            n = results[f]['N'][t]
+
+        analysis_result += """\nNumber of pairwise comparisons is for pairs that differ \
+at each level excluding comparisons that differ at upper levels\n"""
+
+        analysis_result += "Average taxonomic distinctness      = %.4f\n" % results[f]['atd']
+        analysis_result += "Variation in taxonomic distinctness = %.4f\n" % results[f]['vtd']
+        analysis_result += "Minimum taxonomic distinctness      = %.4f\n" % results[f]['euler']['TDmin']
+        analysis_result += "Maximum taxonomic distinctness      = %.4f\n" % results[f]['euler']['TDmax']
+        analysis_result += "von Euler's index of imbalance      = %.4f\n" % results[f]['euler']['EI']
+
+    analysis_result += "\n\n---------------------------------------------------\n"
+
+    return analysis_result
+
+
+def print_funnel_data(p, d1, d2, population, taxon, coef):
+    """Prints computed funnel plot data
+
+    Parameters
+    ----------
+    permutations_number : int
+        Permutations number
+    d1 : int
+    d2 : int
+        d1 and d2 are range for number of species for funnel plot
+    population : dict
+        Dictionary with population information
+    taxon : dict
+        Dictionary with taxon data
+    coef : list
+        List of computed coefficients
+
+    Returns
+    -------
+    analysis_result : str
+        Results as a ready-to-print report
+
+    """
+
+    pop = population.keys()
+
+    dims = []
+    ciarray = []
+    x = []
+    carray = []
+
+    analysis_result = """Confidence limits for average taxonomic distinctness and variation in taxonomic distinctness
+    limits are lower 95% limit for AvTD and upper 95% limit for VarTD\n"""
+    analysis_result += "Number of permutations for confidence limits = %s dimension\n\n" % (p)
+
+    analysis_result += "AvTD05%   AvTDmean  AvTD95%   AvTDup    VarTDlow   VarTD05%   VarTDmean  VarTD95%\n\n"
+
+    for d in range(d1, d2 + 1):
+
+        x.append(d)
+        AvTDci = []
+        VarTDci = []
+        for j in range(p):
+            rsamp = sample(pop, d)
+
+            atd, taxonN, Taxon = ATDmean(population, rsamp, taxon, coef)
+            AvTDci.append(atd)
+            vtd = ATDvariance(taxonN, rsamp, atd, taxon, coef)
+            VarTDci.append(vtd)
+
+        AvTDci.sort()
+        VarTDci.sort()
+
+        AvTD = AvTDci[int(.05 * p)], sum(AvTDci) / p, AvTDci[int(.95 * p)], max(AvTDci)
+        VarTD = min(VarTDci), VarTDci[int(.05 * p)], sum(VarTDci) / p, VarTDci[int(.95 * p)]
+
+        dims.append(d)
+        ciarray.append(AvTD[0])
+        carray.append(AvTD[1])
+
+        analysis_result += '%i        %6.4f   %6.4f   %6.4f   %6.4f   %6.4f   %6.4f   %6.4f   %6.4f\n' \
+                           % (d, AvTD[0], AvTD[1], AvTD[2], AvTD[3],
+                              VarTD[0], VarTD[1], VarTD[2], VarTD[3])
+
+    return analysis_result
+
+
+def process_population_file_line(input_line, taxon, Index, missing='y'):
+    """Processes line from population file,
+    pushes read values into species_taxonomy dict and
+    then returns them along with the species name
+
+    Parameters
+    ----------
+    input_line : str
+        Line from a population file, split by tabs or spaces
+    taxon : dict
+        Dictionary with taxons
+    Index : dict
+        Dict containing index information
+    missing : str
+        y if missing taxons are met in file
+
+    Returns
+    -------
+    species_name : str
+        Name of species (or least taxon)
+    species_taxonomy : dict
+        Dictionary with taxon as a key and taxon value as value
+
+    """
+
+    input_line.strip()
+    splitted_line = input_line.split()
+
+    species_name = splitted_line[0]
+    species_taxonomy = {}
+
+    if missing == 'y':
+        mtax = ''
+        for t in taxon:
+            if splitted_line[Index[t]] == '/':
+                temp = mtax
+            else:
+                temp = splitted_line[Index[t]]
+                mtax = splitted_line[Index[t]]
+
+            species_taxonomy[t] = temp
+
+    else:
+        for t in taxon:
+            species_taxonomy[t] = splitted_line[Index[t]]
+
+    return species_name, species_taxonomy
+
+
+def phy_re_analysis(options, args):
+    """
+    Script should be launched as:
+
+    python PhyRe.py [samplefile] [masterlistfile] s1 s2 [options]
+
+    Parameters
+    ----------
+
+    p : int
+        permutations for confidence intervals
+    d1 : int
+        d1 and d2 are range for number of species for funnel plot
+    d2 : int
+        d1 and d2 are range for number of species for funnel plot
+
+
+    Returns
+    -------
+    first_file.out : file
+        Results from analyses of the sample. By default,
+        the output file has the same name of the sample file
+        with extension .OUT
+    second_file.out : file
+        Results from random subsamples of the master list.
+        The funnel output file has the same name with suffix
+        "_funnel" and extension .OUT. I
+
+
+    Notes
+    ----------
+    Described in Phylogenetic representativeness: a new
+    method for evaluating taxon sampling in evolutionary studies [1]
+
+     References
+    ----------
+    .. [1] http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-11-209
+    .. [2] http://www.mozoolab.net/downloads/manual.pdf
+    """
+
+    samplefile = args['samplefile']
+    popfile = args['popfile']
+    d1 = args['d1']
+    d2 = args['d2']
+
+    output_as_string = False
+
+    if options['m']:
+        missing = options['m']
+    else:
+        missing = 'n'
+
+    if options['o']:
+        out = options['o']
+    else:
+        out = samplefile.split('.')[0]
+
+    if options['p']:
+        p = options['p']
+    else:
+        p = 1000
+
+    if options['c']:
+        ci = options['c']
+    else:
+        ci = 'y'
+
+    if options['b']:
+        batch = options['b']
+    else:
+        batch = 'n'
+
+    if options['l']:
+        pathlengths = options['l']
+    else:
+        pathlengths = 'n'
+
+    if options['s']:
+        output_as_string = True
+
+    sample = defaultdict()
+    # Population - dictionary with population file information
+    population = defaultdict()
+
+    if batch == 'y':
+        Files = []
+    else:
+        Files = [samplefile]
+
+    Index = {}
+    Taxon = defaultdict()
+    coef = {}
+    taxon = []
+    pathLengths = defaultdict()
+
+    for i in open(samplefile):
+
+        if batch == 'y':
+            j = i.strip()
+            Files.append(j)
+        else:
+            break
+
+    duplicates = []
+
+    with open(popfile) as fp:
+        population_file_entries = fp.readlines()
+
+    # We reed two first lines to check if we have System information
+    # If we have it, we rebuild the array of lines
+    lines_removal_counter = 0
+
+    for i in population_file_entries[:2]:
+        # If we encounter string, starting with "Taxon" we get
+        # information about taxons
+        if match('Taxon:', i):
+            lines_removal_counter += 1
+            x = i.split()
+            x.remove('Taxon:')
+
+            for i in x:
+                taxon.append(i)
+                j = x.index(i)
+                # Index list is used to get the indexation of
+                # taxon during string parsing
+                Index[i] = j + 1
+            continue
+
+        elif match('Coefficients:', i):
+            lines_removal_counter += 1
+            x = i.split()
+            x.remove('Coefficients:')
+            x = map(eval, x)
+
+            for t in taxon:
+                i = taxon.index(t)
+                coef[t] = sum(x[i:])
+                pathLengths[t] = x[i]
+
+            continue
+
+    population_file_entries = population_file_entries[lines_removal_counter:]
+
+    # opening population file and getting information
+    for i in population_file_entries:
+
+        # here starts entry processing
+        (species_name, species_taxonomy) = \
+            process_population_file_line(i, taxon, Index, missing)
+
+        if species_name in population:
+            duplicates.append(species_name)
+        else:
+            population[species_name] = species_taxonomy
+
+    sample = population.copy()
+
+    if len(duplicates) > 0:
+        print "Population master list contains %s duplicates" \
+              % (len(duplicates))
+
+    if pathlengths == 'n':
+        coef, popN, pathLengths = PathLength(population, taxon, Taxon)
+    if pathlengths == 'y':
+        XXX, popN, YYY = PathLength(population, taxon, Taxon)
+
+    print "Finished path length calculation"
+
+    results = {}
+
+    """Opening all sample files (or the sample file)
+     and getting information about it"""
+    for f in Files:
+        sample = get_sample_subset_from_sample_file(f, population)
+        f = f.split('.')
+        f = f[0]
+
+        results[f] = {}
+
+        samp = sample.keys()
+
+        atd, taxonN, Taxon = ATDmean(sample, samp, taxon, coef)
+        average_taxonomic_distinctness_variance = \
+            ATDvariance(taxonN, samp, atd, taxon, coef)
+        euler_results = euler(sample, atd, taxonN, taxon, Taxon, coef)
+
+        results[f]['atd'] = atd
+        results[f]['vtd'] = average_taxonomic_distinctness_variance
+        results[f]['euler'] = euler_results
+        results[f]['N'] = taxonN
+        results[f]['n'] = len(sample)
+        results[f]['taxon'] = Taxon
+
+    phy_re_result = printResults(taxon, taxonN, popN, pathLengths, results)
+
+    funnel_data = ''
+    if ci == 'y':
+        funnel_data = print_funnel_data(p, d1, d2, population, taxon, coef)
+
+    if output_as_string:
+        return phy_re_result, funnel_data
+    else:
+        with open(out + '.out', 'w') as fp:
+            fp.write(phy_re_result)
+        with open(out.split('_')[0] + '_funnel.out', 'w') as fp:
+            fp.write(funnel_data)
+
+
+if __name__ == "__main__":
+    samplefile = sys.argv[1]
+    del sys.argv[1]
+    popfile = sys.argv[1]
+    del sys.argv[1]
+
+    p = 1000
+    d1 = 10
+    d2 = 70
+    ci = 'y'
+    b = 'n'
+    l = 'n'
+    batch = b
+    pathlengths = l
+    missing = 'n'
+
+    parser = OptionParser()
+
+    d1 = int(sys.argv[1])
+    del sys.argv[1]
+    d2 = int(sys.argv[1])
+    del sys.argv[1]
+
+    parser.add_option('-o')
+    parser.add_option('-p', type='int')
+    parser.add_option('-c')
+    parser.add_option('-b')
+    parser.add_option('-l')
+    parser.add_option('-m')
+
+    (options, _) = parser.parse_args()
+
+    args = dict()
+
+    args['samplefile'] = samplefile
+    args['popfile'] = popfile
+    args['d1'] = d1
+    args['d2'] = d2
+
+    options = vars(options)
+    options['s'] = None
+
+    phy_re_analysis(options, args)
+\end{lstlisting}
+
+\clearpage
+\section{Appendix C}
+
+Metazoa sample list:\\
+Output from Average Taxonomic Distinctness\\
+Number of taxa and path lengths for each taxonomic level:\\
+\newline
+\begin{tabular}{lll}
+Phylum  &  25	& 18.9122\\
+Class   &  	77	& 13.3040\\
+Order   & 	509	& 16.7200\\
+Family  & 	5173 &	17.7618\\
+Genus   &  	47624	& 17.5603\\
+Species & 	237002 & 15.7416\\
+\end{tabular}
+\newline
+---------------------------------------------------\\
+Results for sample: tests/metazoa\_sample\_list\\
+Dimension for this sample is 5075\\
+Number of taxa and pairwise comparisons  at each taxon level:\\
+\newline
+\begin{tabular}{lll}
+Phylum & 19	& 13274988 \\
+Class & 69 &	8543528 \\
+Order & 343	& 3470118 \\
+Family & 1350	& 301908 \\
+Genus & 3249 & 149736 \\
+Species &  5073 &	10268 \\
+\end{tabular}
+Number of pairwise comparisons is for pairs that differ at each level excluding comparisons that differ at upper levels\\
+\newline
+\begin{tabular}{lll}
+Average taxonomic distinctness      & = & 88.3887 \\
+Variation in taxonomic distinctness & = & 180.4876 \\
+Minimum taxonomic distinctness      & = & 41.8811 \\
+Maximum taxonomic distinctness      & = & 98.7421 \\
+von Euler's index of imbalance      & = & 0.1821 \\
+\end{tabular}\newline
+--------------------------------------------------\\
+Metazoa funnel out:\\
+Confidence limits for average taxonomic distinctness and variation in taxonomic 
+distinctness limits are lower 95\% limit for AvTD and upper 95\% limit for VarTD
+Number of permutations for confidence limits = 100 dimension. $\backslash t$ is used as delimeter.
+
+% Из google docs копируется одним столбцом, ничего умнее не придумал )
+%import numpy as np
+%numbers = [float(num) for num in data.split()]
+%table = np.array(numbers).reshape(-1,9)
+%table = table.reshape((-1,9))
+%rows, cols = table.shape[:2]
+%for row in range(rows):
+%    str_row = ''
+%    str_row += str(int(table[row,0])) + ' & '
+%    for col in range(1,cols-1):
+%        str_row += str(table[row,col]) + ' & '
+%    str_row += str(table[row,cols-1]) + ' \\\\ \\hline'
+%    print(str_row)
+
+\fontsize{6}{7.2}\selectfont
+\begin{tabularx}{\textwidth}{|l|X|X|X|X|X|X|X|X|}
+\hline
+n & AvTD05\% & AvTDM & AvTD95\% & AvTDup & VarTDlow & VarTD05\% & VarTDmn & VarTD95\% \\ \hline
+5053 & 86.9915 & 87.2865 & 87.557 & 87.9186 & 256.9094 & 260.8164 & 264.3342 & 269.3389 \\ \hline
+5054 & 86.9214 & 87.2861 & 87.6889 & 87.8435 & 257.2203 & 259.6934 & 264.0809 & 269.4855 \\ \hline
+5055 & 86.9923 & 87.307 & 87.6943 & 87.8068 & 257.0888 & 258.917 & 263.7819 & 268.7063 \\ \hline
+5056 & 86.9113 & 87.2914 & 87.6686 & 88.0103 & 254.4385 & 258.8278 & 264.2028 & 269.2213 \\ \hline
+5057 & 86.8941 & 87.2171 & 87.5928 & 87.8341 & 256.7088 & 260.1957 & 264.9728 & 269.39 \\ \hline
+5058 & 86.8956 & 87.3 & 87.673 & 87.7326 & 257.9241 & 258.7998 & 263.7817 & 269.2588 \\ \hline
+5059 & 86.8833 & 87.2949 & 87.6565 & 87.9005 & 253.8722 & 259.7942 & 264.4127 & 269.9806 \\ \hline
+5060 & 86.8042 & 87.2772 & 87.6523 & 87.7896 & 257.9275 & 259.3144 & 264.4791 & 269.7312 \\ \hline
+5061 & 86.8963 & 87.2915 & 87.6054 & 87.7528 & 257.504 & 259.8151 & 263.9886 & 269.5573 \\ \hline
+5062 & 86.8903 & 87.2293 & 87.6104 & 87.6718 & 257.8695 & 259.7208 & 264.7938 & 270.4248 \\ \hline
+5063 & 87.0057 & 87.3119 & 87.7339 & 87.8303 & 257.4033 & 259.3602 & 263.8734 & 268.6525 \\ \hline
+5064 & 86.9116 & 87.2694 & 87.6238 & 87.9409 & 256.7683 & 259.9255 & 264.5486 & 269.0272 \\ \hline
+5065 & 86.8341 & 87.2406 & 87.5615 & 87.7113 & 257.7438 & 259.7281 & 264.8819 & 271.7095 \\ \hline
+5066 & 86.9872 & 87.3044 & 87.6705 & 87.8477 & 256.6774 & 258.831 & 263.9626 & 269.1441 \\ \hline
+5067 & 86.9346 & 87.2821 & 87.5819 & 87.6806 & 259.2338 & 259.9726 & 264.2029 & 268.5929 \\ \hline
+5068 & 86.945 & 87.3381 & 87.6607 & 87.8123 & 257.9902 & 259.2847 & 263.5497 & 268.9125 \\ \hline
+5069 & 86.8656 & 87.2391 & 87.6434 & 87.756 & 255.4014 & 259.2918 & 264.261 & 270.3236 \\ \hline
+5070 & 86.9034 & 87.2468 & 87.6182 & 87.7977 & 255.8868 & 259.4695 & 264.4859 & 270.4709 \\ \hline
+5071 & 86.9551 & 87.3392 & 87.703 & 87.8537 & 256.83 & 259.0563 & 263.5367 & 269.419 \\ \hline
+5072 & 86.9515 & 87.2751 & 87.6765 & 87.7642 & 257.8512 & 259.199 & 264.537 & 269.0544 \\ \hline
+5073 & 86.9692 & 87.3159 & 87.6903 & 87.9111 & 256.1926 & 259.2627 & 264.1687 & 269.9857 \\ \hline
+5074 & 86.9228 & 87.2775 & 87.6125 & 87.8626 & 257.1781 & 260.0584 & 264.7167 & 269.9487 \\ \hline
+5075 & 86.9382 & 87.2678 & 87.6004 & 87.7024 & 257.456 & 259.1277 & 264.1937 & 269.0391 \\ \hline
+5076 & 87.0132 & 87.2995 & 87.682 & 87.9082 & 254.9331 & 258.9646 & 263.9338 & 269.9183 \\ \hline
+5077 & 86.9288 & 87.2693 & 87.7503 & 87.9517 & 254.6975 & 258.4055 & 264.3302 & 270.0449 \\ \hline
+5078 & 86.9181 & 87.2718 & 87.6099 & 87.7554 & 257.5408 & 258.8725 & 264.305 & 269.9788 \\ \hline
+5079 & 86.9674 & 87.2816 & 87.5978 & 87.8482 & 257.2339 & 259.609 & 264.0811 & 268.763 \\ \hline
+5080 & 86.9766 & 87.2601 & 87.6347 & 87.7412 & 258.7089 & 259.9615 & 264.5041 & 269.1391 \\ \hline
+5081 & 86.9323 & 87.2585 & 87.6112 & 87.7361 & 257.4647 & 259.7795 & 264.7923 & 270.508 \\ \hline
+5082 & 86.8868 & 87.2713 & 87.6252 & 87.8037 & 257.9609 & 259.7316 & 264.2883 & 268.5458 \\ \hline
+5083 & 86.9854 & 87.2903 & 87.715 & 87.8057 & 257.6096 & 259.2237 & 264.4504 & 269.3352 \\ \hline
+5084 & 86.9796 & 87.2885 & 87.6696 & 87.755 & 256.8211 & 259.5291 & 264.3652 & 268.895 \\ \hline
+5085 & 86.9434 & 87.3128 & 87.7478 & 87.8123 & 256.9667 & 258.6255 & 263.8222 & 269.7195 \\ \hline
+5086 & 86.9324 & 87.2969 & 87.6913 & 87.8337 & 256.9427 & 259.1669 & 263.9449 & 269.5206 \\ \hline
+5087 & 86.9307 & 87.2733 & 87.5929 & 87.8116 & 258.0629 & 260.4985 & 264.4232 & 268.9631 \\ \hline
+5088 & 86.8446 & 87.2493 & 87.7048 & 87.8247 & 256.4796 & 259.4731 & 264.6953 & 269.7004 \\ \hline
+5089 & 86.9281 & 87.2727 & 87.6482 & 87.8007 & 255.5697 & 259.2311 & 264.3767 & 270.018 \\ \hline
+5090 & 87.0204 & 87.333 & 87.7157 & 88.0122 & 254.6629 & 257.1049 & 263.6412 & 269.496 \\ \hline
+5091 & 86.9006 & 87.261 & 87.6342 & 87.9061 & 256.8013 & 260.0589 & 264.6817 & 270.2992 \\ \hline
+5092 & 86.9444 & 87.2966 & 87.6632 & 87.8705 & 256.1797 & 258.712 & 264.1767 & 270.3052 \\ \hline
+5093 & 86.9555 & 87.3145 & 87.7246 & 87.8394 & 255.5858 & 258.4624 & 264.1444 & 269.7621 \\ \hline
+5094 & 86.9528 & 87.2982 & 87.6959 & 87.8543 & 257.9885 & 259.5865 & 264.2185 & 268.8803 \\ \hline
+5095 & 86.9149 & 87.2624 & 87.6596 & 87.8243 & 256.5309 & 258.7864 & 264.6723 & 269.7683 \\ \hline
+5096 & 86.893 & 87.2623 & 87.6315 & 87.8186 & 257.2334 & 259.4578 & 264.3892 & 268.9836 \\ \hline
+\end{tabularx}
+
+
+
+
+\end{document} 
